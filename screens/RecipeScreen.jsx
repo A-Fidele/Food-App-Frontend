@@ -1,19 +1,10 @@
-import {
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  ScrollView,
-} from "react-native";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { recipes } from "../data/recipes";
 import { useEffect, useState } from "react";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useDispatch } from "react-redux";
-import MenuIcon from "../components/reusable/MenuIcon";
 import { addFavoriteRecipe, updateServingNb } from "../reducers/favorites";
-import BackIcon from "../components/reusable/backIcon";
 import RecipeData from "../components/RecipeData";
 import IngredientsHeader from "../components/reusable/IngredientsHeader";
 import Ingredients from "../components/Ingredients";
