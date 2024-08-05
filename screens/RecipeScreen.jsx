@@ -120,14 +120,4 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 150,
     padding: 30,
   },
-  titleContainer: {
-    marginBottom: 30,
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 28,
-  },
-  subTitle: {
-    color: "grey",
-  },
 });

@@ -1,10 +1,11 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useSelector } from "react-redux";
-import Recipe from "../components/Recipe";
 import { useNavigation } from "@react-navigation/native";
 import MenuIcon from "../components/reusable/MenuIcon";
 import MenuModal from "../components/reusable/MenuModal";
 import { useState } from "react";
+import Title from "../components/Recipe/Title";
+import FavoritesList from "../components/Recipe/FavoritesList";
 
 export default function MyRecipesScreen() {
   const navigation = useNavigation();
@@ -36,29 +37,11 @@ export default function MyRecipesScreen() {
         handleNavigateSearch={handleNavigateSearch}
         handleNavigateFavorites={handleNavigateFavorites}
       />
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>The best ones...</Text>
-      </View>
-      <ScrollView>
-        <View style={styles.favoritesContainer}>
-          {favorites.map((recipe) => {
-            return (
-              <Recipe
-                key={recipe.id}
-                id={recipe.id}
-                image={recipe.image}
-                name={recipe.name}
-                description={recipe.desc}
-                color={recipe.color}
-                servingNb={recipe.servingNb}
-                handlePress={() =>
-                  handlePressRecipe(recipe.id, recipe.servingNb)
-                }
-              />
-            );
-          })}
-        </View>
-      </ScrollView>
+      <Title />
+      <FavoritesList
+        favorites={favorites}
+        handlePressRecipe={handlePressRecipe}
+      />
     </View>
   );
 }
@@ -67,21 +50,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
-  },
-  titleContainer: {
-    width: "100%",
-    marginTop: 30,
-    marginBottom: 30,
-    marginLeft: 15,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-  },
-  favoritesContainer: {
-    flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
   },
 });
