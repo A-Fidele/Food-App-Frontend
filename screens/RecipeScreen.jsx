@@ -52,6 +52,7 @@ export default function RecipeScreen() {
     const dataServing = { id, servingNb: updatedServingNb };
     dispatch(updateServingNb(dataServing));
   };
+
   const handleDecrease = async () => {
     const updatedServingNb = servingNb > 1 && servingNb - 1;
     setServingNb(updatedServingNb);
@@ -86,16 +87,19 @@ export default function RecipeScreen() {
         <TouchableOpacity onPress={handleNavigation}>
           <FontAwesome name="arrow-left" size={25} style={styles.arrowIcon} />
         </TouchableOpacity>
+
         <View style={styles.imageContainer}>
           <Image
             source={image}
             style={{ width: "100%", height: "100%", resizeMode: "contain" }}
           />
         </View>
+
         <TouchableOpacity style={styles.icon} onPress={() => handleBookmark()}>
           <FontAwesome name="bookmark" size={25} color="white" />
         </TouchableOpacity>
       </View>
+
       <View style={styles.recipeDataContainer}>
         <RecipeData color={color} time={time} level={level} rating={rating} />
         <IngredientsHeader
