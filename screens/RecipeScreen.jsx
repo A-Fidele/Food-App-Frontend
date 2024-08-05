@@ -1,13 +1,15 @@
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { recipes } from "../data/recipes";
 import { useEffect, useState } from "react";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useDispatch } from "react-redux";
 import { addFavoriteRecipe, updateServingNb } from "../reducers/favorites";
 import RecipeData from "../components/RecipeData";
 import IngredientsHeader from "../components/reusable/IngredientsHeader";
 import Ingredients from "../components/Ingredients";
+import BookmarkButton from "../components/Recipe/BookmarkButton";
+import RecipePicture from "../components/Recipe/RecipePicture";
+import GoBackNavigation from "../components/Recipe/GoBackNavigation";
 
 export default function RecipeScreen() {
   const route = useRoute();
@@ -78,28 +80,16 @@ export default function RecipeScreen() {
   };
 
   const handleNavigation = () => {
-    navigation.navigate("Search");
+    navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
       <View style={{ ...styles.headerContainer, backgroundColor: color }}>
-        <TouchableOpacity onPress={handleNavigation}>
-          <FontAwesome name="arrow-left" size={25} style={styles.arrowIcon} />
-        </TouchableOpacity>
-
-        <View style={styles.imageContainer}>
-          <Image
-            source={image}
-            style={{ width: "100%", height: "100%", resizeMode: "contain" }}
-          />
-        </View>
-
-        <TouchableOpacity style={styles.icon} onPress={() => handleBookmark()}>
-          <FontAwesome name="bookmark" size={25} color="white" />
-        </TouchableOpacity>
+        <GoBackNavigation handleNavigation={handleNavigation} />
+        <RecipePicture image={image} />
+        <BookmarkButton handleBookmark={handleBookmark} />
       </View>
-
       <View style={styles.recipeDataContainer}>
         <RecipeData color={color} time={time} level={level} rating={rating} />
         <IngredientsHeader
@@ -119,33 +109,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
   },
-  arrowIcon: {
-    marginLeft: 15,
-    marginTop: 60,
-    position: "absolute",
-  },
   headerContainer: {
     width: "100%",
     height: "40%",
     borderBottomLeftRadius: 150,
-  },
-  imageContainer: {
-    flex: 1,
-    transform: [{ scale: 0.6 }],
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  icon: {
-    backgroundColor: "#1b2a41",
-    borderRadius: 250,
-    width: 70,
-    height: 70,
-    top: "90%",
-    left: "80%",
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 1,
   },
   recipeDataContainer: {
     width: "100%",
