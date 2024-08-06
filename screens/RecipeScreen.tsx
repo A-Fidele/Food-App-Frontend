@@ -10,6 +10,7 @@ import Ingredients from "../components/Ingredients";
 import BookmarkButton from "../components/Recipe/BookmarkButton";
 import RecipePicture from "../components/Recipe/RecipePicture";
 import GoBackNavigation from "../components/Recipe/GoBackNavigation";
+import RecipeTitle from "../components/Recipe/RecipeTitle";
 
 export type RootStackParamList = {
   Recipe: { id: number; quantity?: number };
@@ -103,10 +104,10 @@ export default function RecipeScreen() {
       </View>
       <View style={styles.recipeDataContainer}>
         <RecipeData color={color} time={time} level={level} rating={rating} />
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>{name}</Text>
-          <Text style={styles.desc} >{longDesc}</Text>
-        </View>
+        <RecipeTitle
+          name={name}
+          longDesc={longDesc}
+        />
         <IngredientsHeader
           servingNb={servingNb}
           handleDecrease={handleDecrease}
