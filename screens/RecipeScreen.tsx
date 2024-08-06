@@ -17,27 +17,13 @@ export type RootStackParamList = {
 
 type RecipeScreenRouteProp = RouteProp<RootStackParamList, 'Recipe'>;
 
-type RecipeType = {
-  id: number,
-  servingNb: number,
-  name: string,
-  image: ImageRequireSource,
-  longDesc: string,
-  desc: string,
-  ingredients: IngredientType[],
-  level: string,
-  time: string,
-  rating: number,
-  color: string,
-}
-
 export default function RecipeScreen() {
   const route = useRoute<RecipeScreenRouteProp>();
   const navigation = useNavigation();
   const { id, quantity } = route.params;
 
   const [name, setName] = useState<string>("");
-  const [image, setImage] = useState<ImageRequireSource | null>();
+  const [image, setImage] = useState<ImageRequireSource>();
   const [desc, setDesc] = useState<string>("");
   const [longDesc, setLongDesc] = useState<string>("");
   const [ingredients, setIngredients] = useState<IngredientType[]>([]);

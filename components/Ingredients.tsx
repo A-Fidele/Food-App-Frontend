@@ -1,7 +1,13 @@
 import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { IngredientType } from "../reducers/favorites";
 
-export default function Ingredients({ ingredients, servingNb }) {
+type IngredientsProps = {
+  ingredients: IngredientType[],
+  servingNb: number,
+}
+
+export default function Ingredients({ ingredients, servingNb }: IngredientsProps) {
   return (
     <ScrollView>
       {ingredients.map((ingts) => {

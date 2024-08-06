@@ -16,12 +16,10 @@ export default function RecipesList({ recipesData, handlePressRecipe }: RecipesL
           return (
             <Recipe
               key={recipe.id}
-              id={recipe.id}
               image={recipe.image}
               name={recipe.name}
               description={recipe.desc}
               color={recipe.color}
-              servingNb={recipe.servingNb}
               handlePress={() => handlePressRecipe(recipe.id, recipe.servingNb)}
             />
           );

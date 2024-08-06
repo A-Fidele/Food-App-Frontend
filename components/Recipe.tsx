@@ -1,6 +1,14 @@
 import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ImageRequireSource, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+
+type RecipeProps = {
+  image: ImageRequireSource,
+  name: string,
+  description: string,
+  color: string,
+  handlePress: () => void,
+}
 
 export default function Recipe({
   image,
@@ -8,7 +16,7 @@ export default function Recipe({
   description,
   color,
   handlePress,
-}) {
+}: RecipeProps) {
   const navigation = useNavigation();
 
   return (
