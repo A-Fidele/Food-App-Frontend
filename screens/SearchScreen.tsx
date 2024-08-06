@@ -6,13 +6,14 @@ import { useState } from "react";
 import MenuIcon from "../components/reusable/MenuIcon";
 import MenuModal from "../components/reusable/MenuModal";
 import RecipesList from "../components/Recipe/RecipesList";
+import { HomeScreenNavigationProp } from "../typeScript/constants";
 
 export default function SearchScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<HomeScreenNavigationProp>();
   const [isVisible, setIsVisible] = useState(false);
   const recipesData = recipes;
 
-  const handlePressRecipe = (id, quantity) => {
+  const handlePressRecipe = (id: number, quantity: number) => {
     navigation.navigate("Recipe", { id, quantity });
   };
 

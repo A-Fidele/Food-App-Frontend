@@ -6,13 +6,15 @@ import MenuModal from "../components/reusable/MenuModal";
 import { useState } from "react";
 import Title from "../components/Recipe/Title";
 import FavoritesList from "../components/Recipe/FavoritesList";
+import { HomeScreenNavigationProp } from "../typeScript/constants";
+import { FavoritesState } from "../reducers/favorites";
 
 export default function MyRecipesScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<HomeScreenNavigationProp>();
   const [isVisible, setIsVisible] = useState(false);
-  const favorites = useSelector((state) => state.favorites.value);
+  const favorites = useSelector((state: { favorites: FavoritesState }) => state.favorites.value);
 
-  const handlePressRecipe = (id, quantity) => {
+  const handlePressRecipe = (id: number, quantity: number) => {
     navigation.navigate("Recipe", { id, quantity });
   };
   const handleShowModal = () => {
