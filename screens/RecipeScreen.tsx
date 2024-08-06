@@ -1,4 +1,4 @@
-import { ImageRequireSource, StyleSheet, View } from "react-native";
+import { ImageRequireSource, StyleSheet, Text, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { recipes } from "../data/recipes";
 import { useEffect, useState } from "react";
@@ -117,6 +117,10 @@ export default function RecipeScreen() {
       </View>
       <View style={styles.recipeDataContainer}>
         <RecipeData color={color} time={time} level={level} rating={rating} />
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>{name}</Text>
+          <Text style={styles.desc} >{longDesc}</Text>
+        </View>
         <IngredientsHeader
           servingNb={servingNb}
           handleDecrease={handleDecrease}
@@ -145,4 +149,16 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 150,
     padding: 30,
   },
+  titleContainer: {
+    width: "100%",
+    marginBottom: 30,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: "bold",
+  },
+  desc: {
+    color: "grey",
+    fontWeight: "medium",
+  }
 });

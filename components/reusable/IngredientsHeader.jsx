@@ -14,20 +14,36 @@ export default function IngredientsHeader({
           How many servings?
         </Text>
       </View>
-      <View style={styles.button}>
-        <TouchableOpacity onPress={handleDecrease}>
-          <Text style={styles.buttonText}>-</Text>
-        </TouchableOpacity>
-        <Text style={styles.buttonText}>{servingNb}</Text>
-        <TouchableOpacity onPress={handleIncrease}>
-          <Text style={styles.buttonText}>+</Text>
-        </TouchableOpacity>
+
+      <View style={styles.container}>
+        <View>
+          <TouchableOpacity onPress={handleDecrease} style={styles.button}>
+            <Text style={styles.buttonText}>-</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.button}>
+          <Text style={styles.buttonText}>{servingNb}</Text>
+        </View>
+
+        <View>
+          <TouchableOpacity onPress={handleIncrease} style={styles.button}>
+            <Text style={styles.buttonText}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    width: "40%",
+    borderRadius: 100,
+    justifyContent: "flex-end",
+    backgroundColor: "#e5e5e5",
+  },
   ingredientsHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -38,12 +54,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#e5e5e5",
     justifyContent: "space-around",
     alignItems: "center",
-    width: 120,
-    height: 50,
+    width: 50,
+    height: 45,
     borderRadius: 100,
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
 });
