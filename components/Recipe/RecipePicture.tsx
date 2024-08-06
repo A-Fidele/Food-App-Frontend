@@ -1,7 +1,11 @@
 import React from "react";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, ImageRequireSource, StyleSheet, View } from "react-native";
 
-export default function RecipePicture({ image }) {
+type RecipePictureProps = {
+  image: ImageRequireSource,
+}
+
+export default function RecipePicture({ image }: RecipePictureProps) {
   return (
     <View style={styles.imageContainer}>
       <Image

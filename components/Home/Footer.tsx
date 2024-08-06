@@ -2,7 +2,13 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function Footer({ handleClick, title, actionLabel }) {
+type FooterProps = {
+  handleClick: () => void,
+  title: string,
+  actionLabel: string,
+}
+
+export default function Footer({ handleClick, title, actionLabel }: FooterProps) {
   return (
     <View style={styles.text}>
       <Text style={styles.title}>{title}</Text>
