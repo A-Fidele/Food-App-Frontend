@@ -1,20 +1,22 @@
 import { StyleSheet, View } from "react-native";
-import { useSelector } from "react-redux";
+import { recipes } from "../data/recipes";
+import Header from "../components/Header";
 import { useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import MenuIcon from "../components/reusable/MenuIcon";
 import MenuModal from "../components/reusable/MenuModal";
-import { useState } from "react";
-import Title from "../components/Recipe/Title";
-import FavoritesList from "../components/Recipe/FavoritesList";
+import RecipesList from "../components/Recipe/RecipesList";
+import { HomeScreenNavigationProp } from "../typeScript/constants";
 
-export default function MyRecipesScreen() {
-  const navigation = useNavigation();
+export default function SearchScreen() {
+  const navigation = useNavigation<HomeScreenNavigationProp>();
   const [isVisible, setIsVisible] = useState(false);
-  const favorites = useSelector((state) => state.favorites.value);
+  const recipesData = recipes;
 
-  const handlePressRecipe = (id, quantity) => {
+  const handlePressRecipe = (id: number, quantity: number) => {
     navigation.navigate("Recipe", { id, quantity });
   };
+
   const handleShowModal = () => {
     setIsVisible(!isVisible);
   };
@@ -37,9 +39,9 @@ export default function MyRecipesScreen() {
         handleNavigateSearch={handleNavigateSearch}
         handleNavigateFavorites={handleNavigateFavorites}
       />
-      <Title />
-      <FavoritesList
-        favorites={favorites}
+      <Header />
+      <RecipesList
+        recipesData={recipesData}
         handlePressRecipe={handlePressRecipe}
       />
     </View>
@@ -50,5 +52,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 50,
+    paddingLeft: 15,
+    paddingRight: 15,
+    backgroundColor: "white",
   },
 });

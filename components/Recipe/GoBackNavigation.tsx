@@ -2,7 +2,11 @@ import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function GoBackNavigation({ handleNavigation }) {
+type GoBackNavigationProps = {
+  handleNavigation: () => void,
+}
+
+export default function GoBackNavigation({ handleNavigation }: GoBackNavigationProps) {
   return (
     <TouchableOpacity onPress={handleNavigation}>
       <FontAwesome name="arrow-left" size={25} style={styles.arrowIcon} />

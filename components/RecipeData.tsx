@@ -2,7 +2,14 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function RecipeData({ color, time, level, rating }) {
+type RecipeDataProps = {
+  color: string,
+  time: string,
+  level: string | undefined,
+  rating: number,
+}
+
+export default function RecipeData({ color, time, level, rating }: RecipeDataProps) {
   return (
     <View style={styles.levelContainer}>
       <View style={styles.level}>

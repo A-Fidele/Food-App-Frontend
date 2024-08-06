@@ -2,8 +2,13 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { ScrollView, View } from "react-native";
 import Recipe from "../Recipe";
+import { FavoriteRecipe } from "../../reducers/favorites";
 
-export default function FavoritesList({ favorites, handlePressRecipe }) {
+type FavoritesListProps = {
+  favorites: FavoriteRecipe[],
+  handlePressRecipe: (id: number, servingNb: number) => void,
+}
+export default function FavoritesList({ favorites, handlePressRecipe }: FavoritesListProps) {
   return (
     <ScrollView>
       <View style={styles.favoritesContainer}>
@@ -11,12 +16,10 @@ export default function FavoritesList({ favorites, handlePressRecipe }) {
           return (
             <Recipe
               key={recipe.id}
-              id={recipe.id}
               image={recipe.image}
               name={recipe.name}
               description={recipe.desc}
               color={recipe.color}
-              servingNb={recipe.servingNb}
               handlePress={() => handlePressRecipe(recipe.id, recipe.servingNb)}
             />
           );

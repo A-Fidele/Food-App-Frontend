@@ -9,10 +9,6 @@ export default function Title() {
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 50,
-  },
   titleContainer: {
     width: "100%",
     marginTop: 30,

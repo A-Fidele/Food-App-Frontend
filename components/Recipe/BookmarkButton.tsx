@@ -2,11 +2,16 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-export default function BookmarkButton({ handleBookmark }) {
+type BookmarkButtonProps = {
+  handleBookmark: () => void,
+  isBookmark: boolean,
+}
+
+export default function BookmarkButton({ handleBookmark, isBookmark }: BookmarkButtonProps) {
   return (
     <View style={styles.bookmarkIconContainer}>
       <TouchableOpacity style={styles.icon} onPress={() => handleBookmark()}>
-        <FontAwesome name="bookmark" size={25} color="white" />
+        <FontAwesome name={isBookmark ? "bookmark" : "bookmark-o"} size={25} color="white" />
       </TouchableOpacity>
     </View>
   );

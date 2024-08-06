@@ -1,7 +1,8 @@
+import React from "react";
 import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
+import { RootStackParamList } from '../navigation';
 import HomeScreen from "./screens/HomeScreen";
 import RecipeScreen from "./screens/RecipeScreen";
 import SearchScreen from "./screens/SearchScreen";
@@ -14,20 +15,30 @@ import { LogBox } from "react-native";
 import { Provider } from "react-redux";
 import MyRecipesScreen from "./screens/MyRecipesScreen";
 
-LogBox.ignoreAllLogs(); //supprimer les messages d'alertes
+LogBox.ignoreAllLogs(); // Supprimer les messages d'alertes
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const reducers = combineReducers({ favorites });
-const persistConfig = { key: "foodApp", storage: AsyncStorage };
+const rootReducer = combineReducers({
+  favorites: favorites
+});
+
+type RootState = ReturnType<typeof rootReducer>;
+
+const persistConfig = {
+  key: "foodApp",
+  storage: AsyncStorage
+};
+
 const store = configureStore({
-  reducer: persistReducer(persistConfig, reducers),
+  reducer: persistReducer<RootState>(persistConfig, rootReducer),
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),
 });
+
 const persistor = persistStore(store);
 
-export default function App() {
+const App: React.FC = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -42,4 +53,6 @@ export default function App() {
       </PersistGate>
     </Provider>
   );
-}
+};
+
+export default App;

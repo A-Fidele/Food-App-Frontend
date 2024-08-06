@@ -1,12 +1,18 @@
 import React from "react";
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+type MenuModalProps = {
+  handleShowModal: () => void,
+  handleNavigateSearch: () => void,
+  handleNavigateFavorites: () => void,
+  isVisible: boolean,
+}
 export default function MenuModal({
   handleShowModal,
   handleNavigateSearch,
   handleNavigateFavorites,
   isVisible,
-}) {
+}: MenuModalProps) {
   return (
     <Modal
       visible={isVisible}
