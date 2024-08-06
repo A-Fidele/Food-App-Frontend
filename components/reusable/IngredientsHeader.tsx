@@ -1,11 +1,16 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+type IngredientsHeaderProps = {
+  handleDecrease: () => void,
+  handleIncrease: () => void,
+  servingNb: number,
+}
 export default function IngredientsHeader({
   handleDecrease,
   handleIncrease,
   servingNb,
-}) {
+}: IngredientsHeaderProps) {
   return (
     <View style={styles.ingredientsHeader}>
       <View>

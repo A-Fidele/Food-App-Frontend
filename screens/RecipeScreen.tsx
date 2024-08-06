@@ -1,9 +1,9 @@
-import { ImageRequireSource, StyleSheet, Text, View } from "react-native";
+import { ImageRequireSource, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { recipes } from "../data/recipes";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { addFavoriteRecipe, FavoriteRecipe, IngredientType, updateServingNb } from "../reducers/favorites";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavoriteRecipe, FavoriteRecipe, FavoritesState, IngredientType, updateServingNb } from "../reducers/favorites";
 import RecipeData from "../components/RecipeData";
 import IngredientsHeader from "../components/reusable/IngredientsHeader";
 import Ingredients from "../components/Ingredients";
@@ -34,9 +34,10 @@ export default function RecipeScreen() {
   const [color, setColor] = useState<string>("");
   const [servingNb, setServingNb] = useState<number>(1);
   const [serving, setServing] = useState<string>("");
+  const [isBookmark, setIsBookmark] = useState<boolean>(false)
 
   const dispatch = useDispatch();
-
+  const favorites = useSelector((state: { favorites: FavoritesState }) => state.favorites.value)
   const recipesData = recipes;
   const myRecipe = recipesData.filter((recipe) => recipe.id === id);
 
@@ -52,8 +53,13 @@ export default function RecipeScreen() {
       setRating(data.rating);
       setColor(data.color);
       setServing(data.serving)
+      setIsBookmark(false)
       setServingNb(quantity ? quantity : 1);
     });
+    const existingRecipe = favorites.filter((favorite) => favorite.id === id)
+    if (existingRecipe.length !== 0) {
+      setIsBookmark(true)
+    }
   }, []);
 
   const handleIncrease = () => {
@@ -73,6 +79,7 @@ export default function RecipeScreen() {
 
   const handleBookmark = () => {
     if (image) {
+      setIsBookmark(!isBookmark)
       const data: FavoriteRecipe = {
         id,
         serving,
@@ -95,15 +102,25 @@ export default function RecipeScreen() {
     navigation.goBack();
   };
 
+  console.log('RECIPE isBookmark: ', isBookmark)
+
   return (
     <View style={styles.container}>
       <View style={{ ...styles.headerContainer, backgroundColor: color }}>
         <GoBackNavigation handleNavigation={handleNavigation} />
         <RecipePicture image={image} />
-        <BookmarkButton handleBookmark={handleBookmark} />
+        <BookmarkButton
+          handleBookmark={handleBookmark}
+          isBookmark={isBookmark}
+        />
       </View>
       <View style={styles.recipeDataContainer}>
-        <RecipeData color={color} time={time} level={level} rating={rating} />
+        <RecipeData
+          color={color}
+          time={time}
+          level={level}
+          rating={rating}
+        />
         <RecipeTitle
           name={name}
           longDesc={longDesc}
@@ -136,16 +153,4 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 150,
     padding: 30,
   },
-  titleContainer: {
-    width: "100%",
-    marginBottom: 30,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-  },
-  desc: {
-    color: "grey",
-    fontWeight: "medium",
-  }
 });
