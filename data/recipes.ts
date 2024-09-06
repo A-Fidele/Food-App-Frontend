@@ -1,4 +1,6 @@
-export const recipes = [
+import { FavoriteRecipe } from "../reducers/favorites";
+
+export const recipes: FavoriteRecipe[] = [
   {
     id: 1,
     name: 'Pork Ramen',
@@ -198,6 +200,7 @@ export const recipes = [
     serving: '600 - 700G',
     servingNb: 1,
     longDesc: "This dish has a blend of flavors and textures that will surely please anyone's palate and it's a meal on its own.",
+    level: 'hard',
     time: '30 min',
     rating: 3.5,
     ingredients: [
@@ -225,7 +228,7 @@ export const recipes = [
     serving: '1 crab',
     servingNb: 1,
     longDesc: "Love crab, but don't know how to cook a whole crab? Here's how!",
-    level: 'hard',
+    level: 'easy',
     time: '2 hours',
     rating: 3.8,
     ingredients: [

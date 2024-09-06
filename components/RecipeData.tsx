@@ -13,15 +13,21 @@ export default function RecipeData({ color, time, level, rating }: RecipeDataPro
   return (
     <View style={styles.levelContainer}>
       <View style={styles.level}>
-        <FontAwesome name="pencil" size={20} color={color} left="15%" />
+        <View style={{ left: "15%" }}>
+          <FontAwesome name="pencil" size={20} color={color} />
+        </View>
         <Text style={styles.levelText}>{level}</Text>
       </View>
       <View style={styles.level}>
-        <FontAwesome name="hourglass" size={20} color={color} left="15%" />
+        <View style={{ left: "15%" }}>
+          <FontAwesome name="hourglass" size={20} color={color} />
+        </View>
         <Text style={styles.levelText}>{time}</Text>
       </View>
       <View style={styles.level}>
-        <FontAwesome name="star" size={20} color={color} left="30%" />
+        <View style={{ left: "30%" }}>
+          <FontAwesome name="star" size={20} color={color} />
+        </View>
         <Text style={styles.levelText}>{rating}</Text>
       </View>
     </View>
