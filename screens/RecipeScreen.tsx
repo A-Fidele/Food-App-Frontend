@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "40%",
     borderBottomLeftRadius: 150,
+    zIndex: 2,
   },
   recipeDataContainer: {
     width: "100%",

@@ -18,10 +18,10 @@ export default function BookmarkButton({ handleBookmark, isBookmark }: BookmarkB
 }
 const styles = StyleSheet.create({
   bookmarkIconContainer: {
+    flex: 1,
     position: "absolute",
     top: "90%",
     left: "80%",
-    zIndex: 1,
   },
   icon: {
     backgroundColor: "#1b2a41",
