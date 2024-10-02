@@ -106,7 +106,7 @@ export default function RecipeScreen() {
     <View style={styles.container}>
       <View style={{ ...styles.headerContainer, backgroundColor: color }}>
         <GoBackNavigation handleNavigation={handleNavigation} />
-        <RecipePicture image={image} />
+        <RecipePicture image={image ? image : require("../assets/favicon.png")} />
         <BookmarkButton
           handleBookmark={handleBookmark}
           isBookmark={isBookmark}
