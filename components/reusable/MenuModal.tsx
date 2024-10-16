@@ -17,7 +17,7 @@ export default function MenuModal({
     <Modal
       visible={isVisible}
       transparent={true}
-      animationType="slide"
+      animationType="fade"
       onRequestClose={handleShowModal}
       style={styles.menuModal}
     >

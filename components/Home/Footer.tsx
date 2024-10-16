@@ -33,13 +33,14 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 80,
     color: "white",
-    fontWeight: "bold",
+    fontWeight: "semibold",
     marginRight: 20,
+
   },
   letsgo: {
     fontSize: 28,
     color: "white",
-    fontWeight: "bold",
+    fontWeight: "semibold",
     marginLeft: "auto",
     marginRight: 20,
   },

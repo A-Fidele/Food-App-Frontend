@@ -1,10 +1,11 @@
 import React from "react";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function Title() {
   return (
     <View style={styles.titleContainer}>
-      <Text style={styles.title}>The best ones...</Text>
+      <Text style={styles.title}>The best ones <FontAwesome name="thumbs-up" size={28} />...</Text>
     </View>
   );
 }
@@ -17,6 +18,5 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontWeight: "bold",
   },
 });

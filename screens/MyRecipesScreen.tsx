@@ -8,6 +8,7 @@ import Title from "../components/Recipe/Title";
 import FavoritesList from "../components/Recipe/FavoritesList";
 import { HomeScreenNavigationProp } from "../typeScript/constants";
 import { FavoritesState } from "../reducers/favorites";
+import NoRecipesFound from "../components/Recipe/NoRecipesFound";
 
 export default function MyRecipesScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -30,6 +31,8 @@ export default function MyRecipesScreen() {
     setIsVisible(false);
     navigation.navigate("Favorites");
   };
+  console.log("favorites", favorites);
+
   return (
     <View style={styles.container}>
       <MenuIcon handleShowModal={handleShowModal} />
@@ -39,7 +42,7 @@ export default function MyRecipesScreen() {
         handleNavigateSearch={handleNavigateSearch}
         handleNavigateFavorites={handleNavigateFavorites}
       />
-      <Title />
+      {favorites.length > 0 ? <Title /> : <NoRecipesFound />}
       <FavoritesList
         favorites={favorites}
         handlePressRecipe={handlePressRecipe}
