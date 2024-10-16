@@ -5,7 +5,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 type FooterProps = {
   handleClick: () => void,
   title: string,
-  actionLabel: string,
+  actionLabel: string | JSX.Element,
 }
 
 export default function Footer({ handleClick, title, actionLabel }: FooterProps) {

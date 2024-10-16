@@ -1,11 +1,14 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Animated, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { StyleSheet, View, Animated, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Picture from "../components/Home/Picture";
 import Footer from "../components/Home/Footer";
 import { HomeScreenNavigationProp } from "../typeScript/constants";
+import { useEffect, useRef, useState } from "react";
+import SigninTitle from "../components/Home/Signin/SigninTitle";
+import Inputs from "../components/Home/Signin/Inputs";
+import ErrorMessage from "../components/Home/Signin/ErrorMessage";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { TouchableHighlight } from "react-native-gesture-handler";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import SubmitButton from "../components/Home/Signin/SubmitButton";
 
 
 export default function HomeScreen() {
@@ -36,7 +39,6 @@ export default function HomeScreen() {
       console.log("error", error)
     } else {
       setError("Connecté ;-)")
-      console.log('user: ', user.user.token)
       setToken(user.user.token)
     }
 
@@ -71,50 +73,30 @@ export default function HomeScreen() {
             transform: [{ translateY: slideInAnim }],
             ...styles.titleContainer
           }}>
-            <Text style={styles.title}>{`Login :-)`}</Text>
+            <SigninTitle />
           </Animated.View>
 
           <Animated.View style={{
             opacity: fadeInAnim,
             width: "100%", flexDirection: "row", marginLeft: "50%"
           }}>
-            <Text style={styles.label}><FontAwesome name="user" size={28} /></Text>
-            <TextInput style={{ ...styles.input, marginLeft: "6%" }}
-              value={email}
-              placeholder="email"
-              placeholderTextColor={"#a7a7a7"}
-              secureTextEntry={false}
-              onChangeText={(text) => setEmail(text)}
+            <Inputs
+              email={email}
+              password={password}
+              setEmail={setEmail}
+              setPassword={setPassword}
             />
           </Animated.View>
-          <Animated.View style={{
-            opacity: fadeInAnim,
-            width: "100%", marginLeft: '50%', flexDirection: "row", marginTop: "10%"
-          }}>
-            <Text style={styles.label}><FontAwesome name="key" size={28} /></Text>
-            <TextInput style={styles.input}
-              value={password}
-              placeholder="password"
-              placeholderTextColor={"#a7a7a7"}
-              secureTextEntry={true}
-              onChangeText={(text) => setPassword(text)}
-            />
-          </Animated.View>
-          <View style={styles.errorContainer}>
-            <Text style={styles.error}>{error}</Text>
-          </View>
-          <View style={styles.submitContainer}>
-            <TouchableOpacity onPress={handleSubmit}>
-              <Text style={styles.submitButton}>Validate</Text>
-            </TouchableOpacity>
-          </View>
+          <ErrorMessage error={error} />
+          <SubmitButton handleSubmit={handleSubmit} />
         </View>
       }
-
       <Footer
         handleClick={handleClick}
         title="FoodApp"
-        actionLabel={token ? "Let's Go!" : "Create Account"}
+        actionLabel={token ? "Let's Go!"
+          : <Text >
+            <FontAwesome name="user" size={28} />{"  "}Create Account</Text>}
       />
     </View >
   );
@@ -128,45 +110,10 @@ const styles = StyleSheet.create({
   titleContainer: {
     marginBottom: "20%",
   },
-  title: {
-    color: "white",
-    fontSize: 48,
-    fontWeight: "semibold",
-  },
   login: {
     flex: 1,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
-  label: {
-    color: "white",
-    fontSize: 20,
-  },
-  input: {
-    width: "30%",
-    borderColor: "#655074",
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 2,
-    borderWidth: 1,
-    color: "white",
-    marginLeft: "4%",
-    fontSize: 18,
-  },
-  submitContainer: {
-    marginTop: "10%",
-  },
-  submitButton: {
-    color: "white",
-    fontSize: 20,
-    //marginRight: "10%",
-  },
-  error: {
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  errorContainer: {
-    //backgroundColor: 'yellow',
-    marginTop: "10%",
-  }
 });
