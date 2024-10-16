@@ -14,21 +14,28 @@ export default function HomeScreen() {
   const slideInAnim = useRef(new Animated.Value(-50)).current;
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState('')
 
   const handleClick = () => {
     navigation.navigate("Search");
   };
 
   const handleSubmit = async () => {
-    console.log('email: ', email)
-    console.log('password: ', password)
-    // const response = await fetch('http://localhost:3000/signin', {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ email, password })
-    // }
-    // )
-    // const signinData = await response.json()
+
+    const response = await fetch('http://localhost:3000/users/signin', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password })
+    })
+
+    const user = await response.json()
+
+    if (user.result === false) {
+      setError(user.error)
+      console.log("error", error)
+    } else {
+      setError("connection")
+    }
 
   }
 
@@ -90,6 +97,7 @@ export default function HomeScreen() {
             onChangeText={(text) => setPassword(text)}
           />
         </Animated.View>
+        <View><Text>{error}</Text></View>
         <View style={styles.submitContainer}>
           <TouchableOpacity onPress={handleSubmit}>
             <Text style={styles.submitButton}>Validate</Text>
