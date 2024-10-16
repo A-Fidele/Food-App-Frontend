@@ -14,6 +14,7 @@ export default function HomeScreen() {
   const slideInAnim = useRef(new Animated.Value(-50)).current;
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [token, setToken] = useState("")
   const [error, setError] = useState('')
 
   const handleClick = () => {
@@ -34,7 +35,9 @@ export default function HomeScreen() {
       setError(user.error)
       console.log("error", error)
     } else {
-      setError("connection")
+      setError("Connecté ;-)")
+      console.log('user: ', user.user.token)
+      setToken(user.user.token)
     }
 
   }
@@ -59,58 +62,59 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      {/* <Picture /> */}
+      {token ?
+        <Picture />
+        :
+        <View style={styles.login}>
+          <Animated.View style={{
+            opacity: fadeInAnim,
+            transform: [{ translateY: slideInAnim }],
+            ...styles.titleContainer
+          }}>
+            <Text style={styles.title}>{`Login :-)`}</Text>
+          </Animated.View>
 
-      <View style={styles.login}>
-
-        <Animated.View style={{
-          opacity: fadeInAnim,
-          transform: [{ translateY: slideInAnim }],
-          ...styles.titleContainer
-        }}>
-          <Text style={styles.title}>{`Login :-)`}</Text>
-        </Animated.View>
-
-        <Animated.View style={{
-          opacity: fadeInAnim,
-          width: "100%", flexDirection: "row", marginLeft: "50%"
-        }}>
-          <Text style={styles.label}><FontAwesome name="user" size={28} /></Text>
-          <TextInput style={{ ...styles.input, marginLeft: "6%" }}
-            value={email}
-            placeholder="email"
-            placeholderTextColor={"#a7a7a7"}
-            secureTextEntry={false}
-            onChangeText={(text) => setEmail(text)}
-          />
-        </Animated.View>
-        <Animated.View style={{
-          opacity: fadeInAnim,
-          width: "100%", marginLeft: '50%', flexDirection: "row", marginTop: "10%"
-        }}>
-          <Text style={styles.label}><FontAwesome name="key" size={28} /></Text>
-          <TextInput style={styles.input}
-            value={password}
-            placeholder="password"
-            placeholderTextColor={"#a7a7a7"}
-            secureTextEntry={true}
-            onChangeText={(text) => setPassword(text)}
-          />
-        </Animated.View>
-        <View><Text>{error}</Text></View>
-        <View style={styles.submitContainer}>
-          <TouchableOpacity onPress={handleSubmit}>
-            <Text style={styles.submitButton}>Validate</Text>
-          </TouchableOpacity>
+          <Animated.View style={{
+            opacity: fadeInAnim,
+            width: "100%", flexDirection: "row", marginLeft: "50%"
+          }}>
+            <Text style={styles.label}><FontAwesome name="user" size={28} /></Text>
+            <TextInput style={{ ...styles.input, marginLeft: "6%" }}
+              value={email}
+              placeholder="email"
+              placeholderTextColor={"#a7a7a7"}
+              secureTextEntry={false}
+              onChangeText={(text) => setEmail(text)}
+            />
+          </Animated.View>
+          <Animated.View style={{
+            opacity: fadeInAnim,
+            width: "100%", marginLeft: '50%', flexDirection: "row", marginTop: "10%"
+          }}>
+            <Text style={styles.label}><FontAwesome name="key" size={28} /></Text>
+            <TextInput style={styles.input}
+              value={password}
+              placeholder="password"
+              placeholderTextColor={"#a7a7a7"}
+              secureTextEntry={true}
+              onChangeText={(text) => setPassword(text)}
+            />
+          </Animated.View>
+          <View style={styles.errorContainer}>
+            <Text style={styles.error}>{error}</Text>
+          </View>
+          <View style={styles.submitContainer}>
+            <TouchableOpacity onPress={handleSubmit}>
+              <Text style={styles.submitButton}>Validate</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      }
 
       <Footer
         handleClick={handleClick}
         title="FoodApp"
-        //actionLabel="Let's Go!"
-        actionLabel="Create Account"
-
+        actionLabel={token ? "Let's Go!" : "Create Account"}
       />
     </View >
   );
@@ -150,11 +154,19 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   submitContainer: {
-    marginTop: "20%",
+    marginTop: "10%",
   },
   submitButton: {
     color: "white",
     fontSize: 20,
-    marginRight: "10%",
+    //marginRight: "10%",
+  },
+  error: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  errorContainer: {
+    //backgroundColor: 'yellow',
+    marginTop: "10%",
   }
 });
