@@ -14,13 +14,14 @@ import favorites from "./reducers/favorites";
 import { LogBox } from "react-native";
 import { Provider } from "react-redux";
 import MyRecipesScreen from "./screens/MyRecipesScreen";
+import user from "./reducers/user";
 
 LogBox.ignoreAllLogs(); // Supprimer les messages d'alertes
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const rootReducer = combineReducers({
-  favorites: favorites
+  favorites, user
 });
 
 type RootState = ReturnType<typeof rootReducer>;

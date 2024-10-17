@@ -15,7 +15,7 @@ export default function Footer({ handleClick, title, actionLabel }: FooterProps)
       <TouchableOpacity onPress={handleClick}>
         <Text style={styles.letsgo}>
           {actionLabel}{" "}
-          <FontAwesome name="arrow-right" size={18} color="#ffffff" />{" "}
+          <FontAwesome name="chevron-right" size={22} color="#ffffff" />{" "}
         </Text>
       </TouchableOpacity>
     </View>

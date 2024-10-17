@@ -17,31 +17,55 @@ export default function HomeScreen() {
   const slideInAnim = useRef(new Animated.Value(-50)).current;
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [token, setToken] = useState("")
   const [error, setError] = useState('')
+  const [createAccount, setCreateAccount] = useState(false)
 
   const handleClick = () => {
-    navigation.navigate("Search");
+    if (!token) {
+      setCreateAccount(true)
+    } else {
+      navigation.navigate("Search");
+    }
   };
 
   const handleSubmit = async () => {
-
-    const response = await fetch('http://localhost:3000/users/signin', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password })
-    })
-
-    const user = await response.json()
-
-    if (user.result === false) {
-      setError(user.error)
-      console.log("error", error)
-    } else {
-      setError("Connecté ;-)")
-      setToken(user.user.token)
+    if (!createAccount) {
+      const response = await fetch('http://localhost:3000/users/signin', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      })
+      const user = await response.json()
+      if (user.result === false) {
+        setError(user.error)
+        console.log("error", error)
+      } else {
+        setError("Connecté ;-)")
+        setToken(user.user.token)
+      }
     }
-
+    if (createAccount) {
+      if (password !== confirmPassword) {
+        setError("Les mots de passe sont différents")
+        return
+      }
+      const response = await fetch('http://localhost:3000/users/signup', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      })
+      const user = await response.json()
+      if (user.result === false) {
+        setError(user.error)
+        return
+      } else {
+        setError("Connecté")
+        console.log(user.user);
+        setToken(user.user.token)
+      }
+    }
   }
 
   useEffect(() => {
@@ -60,6 +84,9 @@ export default function HomeScreen() {
     //both animations in parallel
     Animated.parallel([fadeInAnimation, slideInAnimation]).start();
   }, [fadeInAnim, slideInAnim]);
+  console.log("createAccount", createAccount);
+  console.log("password:", password, "confirm:", confirmPassword);
+
 
 
   return (
@@ -83,8 +110,11 @@ export default function HomeScreen() {
             <Inputs
               email={email}
               password={password}
+              confirmPassword={confirmPassword}
               setEmail={setEmail}
               setPassword={setPassword}
+              setConfirmPassword={setConfirmPassword}
+              createAccount={createAccount}
             />
           </Animated.View>
           <ErrorMessage error={error} />
