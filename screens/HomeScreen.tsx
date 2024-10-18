@@ -9,6 +9,8 @@ import Inputs from "../components/Home/Signin/Inputs";
 import ErrorMessage from "../components/Home/Signin/ErrorMessage";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SubmitButton from "../components/Home/Signin/SubmitButton";
+import { login } from "../reducers/user";
+import { useDispatch } from "react-redux";
 
 
 export default function HomeScreen() {
@@ -21,6 +23,7 @@ export default function HomeScreen() {
   const [token, setToken] = useState("")
   const [error, setError] = useState('')
   const [createAccount, setCreateAccount] = useState(false)
+  const dispatch = useDispatch()
 
   const handleClick = () => {
     if (!token) {
@@ -40,9 +43,16 @@ export default function HomeScreen() {
       const user = await response.json()
       if (user.result === false) {
         setError(user.error)
-        console.log("error", error)
       } else {
         setError("Connecté ;-)")
+        dispatch(login({
+          value: {
+            pseudo: "",
+            email: user.user.email,
+            token: user.user.token,
+            favorites: user.user.favorites,
+          }
+        }))
         setToken(user.user.token)
       }
     }
@@ -62,7 +72,14 @@ export default function HomeScreen() {
         return
       } else {
         setError("Connecté")
-        console.log(user.user);
+        dispatch(login({
+          value: {
+            pseudo: "",
+            email: user.user.email,
+            token: user.user.token,
+            favorites: []
+          }
+        }))
         setToken(user.user.token)
       }
     }
@@ -84,10 +101,6 @@ export default function HomeScreen() {
     //both animations in parallel
     Animated.parallel([fadeInAnimation, slideInAnimation]).start();
   }, [fadeInAnim, slideInAnim]);
-  console.log("createAccount", createAccount);
-  console.log("password:", password, "confirm:", confirmPassword);
-
-
 
   return (
     <View style={styles.container}>
