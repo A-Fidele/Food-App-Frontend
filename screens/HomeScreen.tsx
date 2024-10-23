@@ -47,7 +47,7 @@ export default function HomeScreen() {
         setError("Connecté ;-)")
         dispatch(login({
           value: {
-            pseudo: "",
+            pseudo: user.user.pseudo,
             email: user.user.email,
             token: user.user.token,
             favorites: user.user.favorites,
@@ -74,7 +74,7 @@ export default function HomeScreen() {
         setError("Connecté")
         dispatch(login({
           value: {
-            pseudo: "",
+            pseudo: user.user.pseudo,
             email: user.user.email,
             token: user.user.token,
             favorites: []

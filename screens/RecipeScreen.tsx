@@ -38,7 +38,7 @@ export default function RecipeScreen() {
   const [isBookmark, setIsBookmark] = useState<boolean>(false)
 
   const dispatch = useDispatch();
-  const user = useSelector((state: { user: UserState }) => state.user.value)
+  //const user = useSelector((state: { user: UserState }) => state.user.value)
   const favorites = useSelector((state: { favorites: FavoritesState }) => state.favorites.value)
   const recipesData = recipes;
   const myRecipe = recipesData.filter((recipe) => recipe.id === id);
@@ -103,7 +103,7 @@ export default function RecipeScreen() {
   const handleNavigation = () => {
     navigation.goBack();
   };
-  console.log("USERSATE:", user)
+  // console.log("USERSATE:", user)
   return (
     <View style={styles.container}>
       <View style={{ ...styles.headerContainer, backgroundColor: color }}>
