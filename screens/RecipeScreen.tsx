@@ -14,7 +14,7 @@ import RecipeTitle from "../components/Recipe/RecipeTitle";
 import { UserState } from "../reducers/user";
 
 export type RootStackParamList = {
-  Recipe: { id: number; quantity?: number };
+  Recipe: { id: string; quantity?: number };
 };
 
 type RecipeScreenRouteProp = RouteProp<RootStackParamList, 'Recipe'>;
@@ -36,33 +36,52 @@ export default function RecipeScreen() {
   const [servingNb, setServingNb] = useState<number>(1);
   const [serving, setServing] = useState<string>("");
   const [isBookmark, setIsBookmark] = useState<boolean>(false)
+  const [recipesData, setRecipesData] = useState<FavoriteRecipe>()
 
   const dispatch = useDispatch();
-  //const user = useSelector((state: { user: UserState }) => state.user.value)
+  const user = useSelector((state: { user: UserState }) => state.user.value)
   const favorites = useSelector((state: { favorites: FavoritesState }) => state.favorites.value)
-  const recipesData = recipes;
-  const myRecipe = recipesData.filter((recipe) => recipe.id === id);
 
   useEffect(() => {
-    myRecipe.forEach((data) => {
-      setName(data.name);
-      setImage(data.image);
-      setDesc(data.desc);
-      setLongDesc(data.longDesc);
-      setIngredients(data.ingredients);
-      setLevel(data.level);
-      setTime(data.time);
-      setRating(data.rating);
-      setColor(data.color);
-      setServing(data.serving)
+    const findRecipeById = async (id: string) => {
+      fetch('http://localhost:3000/recipes/recipeById', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: id,
+        })
+      }).then((response) => response.json()
+        .then((recipe) => {
+          console.log("result:", recipe.recipe._id)
+          if (recipe.result === false) {
+            console.log("error", recipe.error);
+          } else {
+            setRecipesData(recipe.recipe)
+            const isBookmarked = user.favorites.includes(recipe.recipe._id)
+            setIsBookmark(isBookmarked)
+          }
+        })
+      )
+    }
+    findRecipeById(id)
+  }, [id])
+
+  useEffect(() => {
+    if (recipesData) {
+      setName(recipesData.name);
+      setImage(recipesData.image);
+      setDesc(recipesData.desc);
+      setLongDesc(recipesData.longDesc);
+      setIngredients(recipesData.ingredients);
+      setLevel(recipesData.level);
+      setTime(recipesData.time);
+      setRating(recipesData.rating);
+      setColor(recipesData.color);
+      setServing(recipesData.serving)
       setIsBookmark(false)
       setServingNb(quantity ? quantity : 1);
-    });
-    const existingRecipe = favorites.filter((favorite) => favorite.id === id)
-    if (existingRecipe.length !== 0) {
-      setIsBookmark(true)
     }
-  }, []);
+  }, [recipesData]);
 
   const handleIncrease = () => {
     const updatedServingNb = servingNb + 1;
@@ -103,12 +122,14 @@ export default function RecipeScreen() {
   const handleNavigation = () => {
     navigation.goBack();
   };
-  // console.log("USERSATE:", user)
+
+  console.log("recipesData:", recipesData?.name);
+
   return (
     <View style={styles.container}>
       <View style={{ ...styles.headerContainer, backgroundColor: color }}>
         <GoBackNavigation handleNavigation={handleNavigation} />
-        <RecipePicture image={image ? image : require("../assets/favicon.png")} />
+        <RecipePicture image={image ? { uri: image } : require("../assets/favicon.png")} />
         <BookmarkButton
           handleBookmark={handleBookmark}
           isBookmark={isBookmark}

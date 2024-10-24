@@ -1,9 +1,9 @@
 import React from "react";
-import { Image, ImageRequireSource, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ImageRequireSource, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 type RecipeProps = {
-  image: ImageRequireSource,
+  image: ImageSourcePropType | undefined,
   name: string,
   description: string,
   color: string,
@@ -24,7 +24,7 @@ export default function Recipe({
       style={{ ...styles.recipe, backgroundColor: color }}
       onPress={handlePress}
     >
-      <Image style={styles.image} source={image} />
+      <Image style={styles.image} source={{ uri: image }} />
       <View style={styles.descContainer}>
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.desc}>{description}</Text>

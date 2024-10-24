@@ -15,7 +15,7 @@ const initialState: UserState = {
         pseudo: "",
         email: "",
         token: "",
-        favorites: []
+        favorites: ['6717b3e28a065db023563aa0']
     }
 }
 
