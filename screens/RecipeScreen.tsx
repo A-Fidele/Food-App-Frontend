@@ -35,38 +35,13 @@ export default function RecipeScreen() {
   const [color, setColor] = useState<string>("");
   const [servingNb, setServingNb] = useState<number>(1);
   const [serving, setServing] = useState<string>("");
-  const [isBookmark, setIsBookmark] = useState<boolean>(false)
+  const [isBookmark, setIsBookmark] = useState<boolean>(true)
   const [recipesData, setRecipesData] = useState<FavoriteRecipe>()
 
   const dispatch = useDispatch();
   const user = useSelector((state: { user: UserState }) => state.user.value)
-  const favorites = useSelector((state: { favorites: FavoritesState }) => state.favorites.value)
-
-  useEffect(() => {
-    const findRecipeById = async (id: string) => {
-      fetch('http://localhost:3000/recipes/recipeById', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: id,
-        })
-      }).then((response) => response.json()
-        .then((recipe) => {
-          console.log("result:", recipe.recipe._id)
-          if (recipe.result === false) {
-            console.log("error", recipe.error);
-          } else {
-            setRecipesData(recipe.recipe)
-            const isBookmarked = user.favorites.includes(recipe.recipe._id)
-            setIsBookmark(isBookmarked)
-          }
-        })
-      )
-    }
-    findRecipeById(id)
-  }, [id])
-
-  useEffect(() => {
+  //const favorites = useSelector((state: { favorites: FavoritesState }) => state.favorites.value)
+  const initRecipeData = () => {
     if (recipesData) {
       setName(recipesData.name);
       setImage(recipesData.image);
@@ -78,10 +53,56 @@ export default function RecipeScreen() {
       setRating(recipesData.rating);
       setColor(recipesData.color);
       setServing(recipesData.serving)
-      setIsBookmark(false)
+      //setIsBookmark(isBookmark)
       setServingNb(quantity ? quantity : 1);
     }
-  }, [recipesData]);
+  }
+
+  useEffect(() => {
+    const findRecipeById = async (id: string) => {
+      fetch('http://localhost:3000/recipes/recipeById', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: id,
+        })
+      }).then((response) => response.json()
+        .then((recipe) => {
+          //console.log("result:", recipe.recipe._id)
+          if (recipe.result === false) {
+            //console.log("error", recipe.error);
+          } else {
+            setRecipesData(recipe.recipe)
+            const isFavorite = user.favorites.includes(recipe.recipe._id)
+            setIsBookmark(isFavorite)
+            //console.log(' user.favorites: ', user.favorites, "id:", id, "isBookmark:", isBookmark, "isFavorite:", isFavorite)
+          }
+        })
+      )
+    }
+    findRecipeById(id)
+    //console.log("RECIPESCREEN isBookmark:", isBookmark);
+  }, [id])
+
+  useEffect(() => {
+    // const initRecipeData = () => {
+    //   if (recipesData) {
+    //     setName(recipesData.name);
+    //     setImage(recipesData.image);
+    //     setDesc(recipesData.desc);
+    //     setLongDesc(recipesData.longDesc);
+    //     setIngredients(recipesData.ingredients);
+    //     setLevel(recipesData.level);
+    //     setTime(recipesData.time);
+    //     setRating(recipesData.rating);
+    //     setColor(recipesData.color);
+    //     setServing(recipesData.serving)
+    //     setIsBookmark(isBookmark)
+    //     setServingNb(quantity ? quantity : 1);
+    //   }
+    // }
+    initRecipeData()
+  }, [recipesData, id]);
 
   const handleIncrease = () => {
     const updatedServingNb = servingNb + 1;
@@ -101,21 +122,34 @@ export default function RecipeScreen() {
   const handleBookmark = () => {
     if (image) {
       setIsBookmark(!isBookmark)
-      const data: FavoriteRecipe = {
-        id,
-        serving,
-        servingNb,
-        name,
-        image,
-        longDesc,
-        desc,
-        ingredients,
-        level,
-        time,
-        rating,
-        color,
-      };
-      dispatch(addFavoriteRecipe(data));
+      // const data: FavoriteRecipe = {
+      //   id,
+      //   serving,
+      //   servingNb,
+      //   name,
+      //   image,
+      //   longDesc,
+      //   desc,
+      //   ingredients,
+      //   level,
+      //   time,
+      //   rating,
+      //   color,
+      // };
+      //dispatch(addFavoriteRecipe(data));
+      fetch('http://localhost:3000/users/favorites', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: user.email, recipeId: id })
+      }).then((response) => response.json())
+        .then((data) => {
+          if (data.result) {
+            initRecipeData()
+
+          } else (
+            console.log("result:", data.result, "userFavorites:", data.userFavorites)
+          )
+        })
     }
   };
 
@@ -123,7 +157,7 @@ export default function RecipeScreen() {
     navigation.goBack();
   };
 
-  console.log("recipesData:", recipesData?.name);
+  //console.log("RECIPESCREEN isBookmark:", isBookmark);
 
   return (
     <View style={styles.container}>

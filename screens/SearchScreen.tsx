@@ -1,5 +1,4 @@
 import { StyleSheet, View } from "react-native";
-import { recipes } from "../data/recipes";
 import Header from "../components/Header";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";

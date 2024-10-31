@@ -1,9 +1,9 @@
 import React from "react";
-import { Image, ImageRequireSource, ImageSourcePropType, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Image, ImageURISource, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 type RecipeProps = {
-  image: ImageSourcePropType | undefined,
+  image: ImageURISource | undefined,
   name: string,
   description: string,
   color: string,
