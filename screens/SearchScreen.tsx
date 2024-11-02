@@ -1,5 +1,4 @@
 import { StyleSheet, View } from "react-native";
-import { recipes } from "../data/recipes";
 import Header from "../components/Header";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
@@ -17,7 +16,7 @@ export default function SearchScreen() {
   const [isVisible, setIsVisible] = useState(false);
   const [recipesData, setRecipesData] = useState<FavoriteRecipe[]>([])
 
-  const handlePressRecipe = (id: number, quantity: number) => {
+  const handlePressRecipe = (id: string, quantity: number) => {
     navigation.navigate("Recipe", { id, quantity });
   };
 
@@ -48,7 +47,7 @@ export default function SearchScreen() {
           throw new Error(`Erreur HTTP! Statut: ${response.status}`);
         }
         const recipesData = await response.json();
-        recipesData && setRecipesData(recipesData.recipes);
+        setRecipesData(recipesData.recipes);
       } catch (error) {
         console.error('Erreur lors de la récupération des données :', error);
       }

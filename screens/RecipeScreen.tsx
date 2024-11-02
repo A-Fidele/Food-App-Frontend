@@ -1,6 +1,5 @@
 import { ImageRequireSource, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { recipes } from "../data/recipes";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addFavoriteRecipe, FavoriteRecipe, FavoritesState, IngredientType, updateServingNb } from "../reducers/favorites";
@@ -14,7 +13,7 @@ import RecipeTitle from "../components/Recipe/RecipeTitle";
 import { UserState } from "../reducers/user";
 
 export type RootStackParamList = {
-  Recipe: { id: number; quantity?: number };
+  Recipe: { id: string; quantity?: number };
 };
 
 type RecipeScreenRouteProp = RouteProp<RootStackParamList, 'Recipe'>;
@@ -36,33 +35,14 @@ export default function RecipeScreen() {
   const [servingNb, setServingNb] = useState<number>(1);
   const [serving, setServing] = useState<string>("");
   const [isBookmark, setIsBookmark] = useState<boolean>(false)
+  const [recipesData, setRecipesData] = useState<FavoriteRecipe>()
 
   const dispatch = useDispatch();
-  //const user = useSelector((state: { user: UserState }) => state.user.value)
-  const favorites = useSelector((state: { favorites: FavoritesState }) => state.favorites.value)
-  const recipesData = recipes;
-  const myRecipe = recipesData.filter((recipe) => recipe.id === id);
+  const user = useSelector((state: { user: UserState }) => state.user.value)
 
-  useEffect(() => {
-    myRecipe.forEach((data) => {
-      setName(data.name);
-      setImage(data.image);
-      setDesc(data.desc);
-      setLongDesc(data.longDesc);
-      setIngredients(data.ingredients);
-      setLevel(data.level);
-      setTime(data.time);
-      setRating(data.rating);
-      setColor(data.color);
-      setServing(data.serving)
-      setIsBookmark(false)
-      setServingNb(quantity ? quantity : 1);
-    });
-    const existingRecipe = favorites.filter((favorite) => favorite.id === id)
-    if (existingRecipe.length !== 0) {
-      setIsBookmark(true)
-    }
-  }, []);
+  const handleNavigation = () => {
+    navigation.goBack();
+  };
 
   const handleIncrease = () => {
     const updatedServingNb = servingNb + 1;
@@ -79,36 +59,67 @@ export default function RecipeScreen() {
     dispatch(updateServingNb(dataServing));
   };
 
-  const handleBookmark = () => {
-    if (image) {
-      setIsBookmark(!isBookmark)
-      const data: FavoriteRecipe = {
-        id,
-        serving,
-        servingNb,
-        name,
-        image,
-        longDesc,
-        desc,
-        ingredients,
-        level,
-        time,
-        rating,
-        color,
-      };
-      dispatch(addFavoriteRecipe(data));
+  useEffect(() => {
+    if (recipesData) {
+      setName(recipesData.name);
+      setImage(recipesData.image);
+      setDesc(recipesData.desc);
+      setLongDesc(recipesData.longDesc);
+      setIngredients(recipesData.ingredients);
+      setLevel(recipesData.level);
+      setTime(recipesData.time);
+      setRating(recipesData.rating);
+      setColor(recipesData.color);
+      setServing(recipesData.serving);
+      setServingNb(quantity ? quantity : 1);
     }
-  };
+  }, [recipesData, quantity]);
 
-  const handleNavigation = () => {
-    navigation.goBack();
+  useEffect(() => {
+    const findRecipeById = async (id: string) => {
+      fetch('http://localhost:3000/recipes/findRecipeById', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: id,
+          email: user.email,
+        })
+      }).then((response) => response.json()
+        .then((recipe) => {
+          if (recipe) {
+            setRecipesData(recipe.recipe)
+            setIsBookmark(recipe.isFavorite)
+          } else {
+            console.log("Error");
+            return
+          }
+        })
+      )
+    }
+    findRecipeById(id)
+  }, [id])
+
+  const handleBookmark = () => {
+    setIsBookmark(!isBookmark)
+    fetch('http://localhost:3000/users/updateFavorites', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: user.email, recipeId: id })
+    }).then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("BOOKMARK:", data.result);
+        } else (
+          console.log("result:", data.result, "userFavorites:", data.userFavorites)
+        )
+      })
   };
-  // console.log("USERSATE:", user)
+  console.log(' id, quantity: ', id, ", ", quantity)
   return (
     <View style={styles.container}>
       <View style={{ ...styles.headerContainer, backgroundColor: color }}>
         <GoBackNavigation handleNavigation={handleNavigation} />
-        <RecipePicture image={image ? image : require("../assets/favicon.png")} />
+        <RecipePicture image={image ? { uri: image } : require("../assets/favicon.png")} />
         <BookmarkButton
           handleBookmark={handleBookmark}
           isBookmark={isBookmark}

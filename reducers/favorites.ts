@@ -6,7 +6,8 @@ export type IngredientType = {
 }
 
 export type FavoriteRecipe = {
-  id: number;
+  [x: string]: any;
+  id: string;
   name: string;
   desc: string;
   image: ImageRequireSource;
