@@ -1,6 +1,5 @@
 import { ImageRequireSource, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { recipes } from "../data/recipes";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addFavoriteRecipe, FavoriteRecipe, FavoritesState, IngredientType, updateServingNb } from "../reducers/favorites";
@@ -40,7 +39,6 @@ export default function RecipeScreen() {
 
   const dispatch = useDispatch();
   const user = useSelector((state: { user: UserState }) => state.user.value)
-  //const favorites = useSelector((state: { favorites: FavoritesState }) => state.favorites.value)
 
   const handleNavigation = () => {
     navigation.goBack();
@@ -79,18 +77,21 @@ export default function RecipeScreen() {
 
   useEffect(() => {
     const findRecipeById = async (id: string) => {
-      fetch('http://localhost:3000/recipes/recipeById', {
+      fetch('http://localhost:3000/recipes/findRecipeById', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: id,
+          email: user.email,
         })
       }).then((response) => response.json()
         .then((recipe) => {
-          if (recipe.result === false) {
-            return
-          } else {
+          if (recipe) {
             setRecipesData(recipe.recipe)
+            setIsBookmark(recipe.isFavorite)
+          } else {
+            console.log("Error");
+            return
           }
         })
       )
@@ -98,48 +99,21 @@ export default function RecipeScreen() {
     findRecipeById(id)
   }, [id])
 
-  useEffect(() => {
-    if (recipesData && user.favorites) {
-      const isFavorite = user.favorites.includes(recipesData._id);
-      setIsBookmark(isFavorite);
-    }
-  }, [recipesData, user.favorites])
-
-
   const handleBookmark = () => {
-    if (image) {
-      setIsBookmark(!isBookmark)
-      const data: FavoriteRecipe = {
-        id,
-        serving,
-        servingNb,
-        name,
-        image,
-        longDesc,
-        desc,
-        ingredients,
-        level,
-        time,
-        rating,
-        color,
-      };
-      dispatch(addFavoriteRecipe(data));
-      fetch('http://localhost:3000/users/updateFavorites', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: user.email, recipeId: id })
-      }).then((response) => response.json())
-        .then((data) => {
-          if (data.result) {
-            console.log("BOOKMARK:", data.result);
-          } else (
-            console.log("result:", data.result, "userFavorites:", data.userFavorites)
-          )
-        })
-    }
+    setIsBookmark(!isBookmark)
+    fetch('http://localhost:3000/users/updateFavorites', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: user.email, recipeId: id })
+    }).then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("BOOKMARK:", data.result);
+        } else (
+          console.log("result:", data.result, "userFavorites:", data.userFavorites)
+        )
+      })
   };
-
-  console.log("RECIPESCREEN isBookmark:", isBookmark);
 
   return (
     <View style={styles.container}>
