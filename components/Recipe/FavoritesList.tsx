@@ -6,7 +6,7 @@ import { FavoriteRecipe } from "../../reducers/favorites";
 
 type FavoritesListProps = {
   favorites: FavoriteRecipe[],
-  handlePressRecipe: (id: number, servingNb: number) => void,
+  handlePressRecipe: (id: string, servingNb: number) => void,
 }
 export default function FavoritesList({ favorites, handlePressRecipe }: FavoritesListProps) {
   return (
@@ -15,12 +15,12 @@ export default function FavoritesList({ favorites, handlePressRecipe }: Favorite
         {favorites.map((recipe) => {
           return (
             <Recipe
-              key={recipe.id}
+              key={recipe._id}
               image={recipe.image}
               name={recipe.name}
               description={recipe.desc}
               color={recipe.color}
-              handlePress={() => handlePressRecipe(recipe.id, recipe.servingNb)}
+              handlePress={() => handlePressRecipe(recipe._id, recipe.servingNb)}
             />
           );
         })}

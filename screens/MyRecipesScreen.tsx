@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Title from "../components/Recipe/Title";
 import FavoritesList from "../components/Recipe/FavoritesList";
 import { HomeScreenNavigationProp } from "../typeScript/constants";
-import { FavoriteRecipe, FavoritesState } from "../reducers/favorites";
+import { FavoriteRecipe } from "../reducers/favorites";
 import NoRecipesFound from "../components/Recipe/NoRecipesFound";
 import { UserState } from "../reducers/user";
 
@@ -17,9 +17,7 @@ export default function MyRecipesScreen() {
   const [favorites, setFavorites] = useState<FavoriteRecipe[]>([])
   const user = useSelector((state: { user: UserState }) => state.user.value)
 
-  //const favorites = useSelector((state: { favorites: FavoritesState }) => state.favorites.value);
-
-  const handlePressRecipe = (id: number, quantity: number) => {
+  const handlePressRecipe = (id: string, quantity: number) => {
     navigation.navigate("Recipe", { id, quantity });
   };
   const handleShowModal = () => {
@@ -51,7 +49,6 @@ export default function MyRecipesScreen() {
             console.log("error", data.error);
             setFavorites([])
           } else {
-            console.log("DATA:", data.favorites);
             setFavorites(data.favorites)
           }
         })
@@ -59,6 +56,8 @@ export default function MyRecipesScreen() {
     }
     fetchFavoriteRecipes()
   }, [])
+
+  //console.log("myrecipescreen id:",id,"quantity", quantity);
 
   return (
     <View style={styles.container}>

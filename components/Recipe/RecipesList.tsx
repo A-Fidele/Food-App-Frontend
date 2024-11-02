@@ -10,35 +10,35 @@ type RecipesListProps = {
 
 export default function RecipesList({ recipesData, handlePressRecipe }: RecipesListProps) {
 
-  const uploadRecipe = async (recipe: any) => {
-    fetch('http://localhost:3000/recipes/insert', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: recipe.name,
-        image: recipe.image,
-        desc: recipe.desc,
-        color: recipe.color,
-        level: recipe.level,
-        longDesc: recipe.longDesc,
-        rating: recipe.rating,
-        serving: recipe.serving,
-        servingNb: recipe.servingNb,
-        time: recipe.time,
-        ingredients: recipe.ingredients,
-      })
-    }).then((response) => response.json()
-      .then((data) => {
-        console.log("result:", data.result)
-        if (data.result === false) {
-          console.log("error", data.error);
-        } else {
-          console.log("DATA:", data.recipe);
-        }
-      })
-    )
+  // const uploadRecipe = async (recipe: any) => {
+  //   fetch('http://localhost:3000/recipes/insert', {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({
+  //       name: recipe.name,
+  //       image: recipe.image,
+  //       desc: recipe.desc,
+  //       color: recipe.color,
+  //       level: recipe.level,
+  //       longDesc: recipe.longDesc,
+  //       rating: recipe.rating,
+  //       serving: recipe.serving,
+  //       servingNb: recipe.servingNb,
+  //       time: recipe.time,
+  //       ingredients: recipe.ingredients,
+  //     })
+  //   }).then((response) => response.json()
+  //     .then((data) => {
+  //       console.log("result:", data.result)
+  //       if (data.result === false) {
+  //         console.log("error", data.error);
+  //       } else {
+  //         console.log("DATA:", data.recipe);
+  //       }
+  //     })
+  //   )
 
-  }
+  //}
   return (
     <ScrollView>
       <View style={styles.recipeContainer}>

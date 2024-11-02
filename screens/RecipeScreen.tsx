@@ -114,7 +114,7 @@ export default function RecipeScreen() {
         )
       })
   };
-
+  console.log(' id, quantity: ', id, ", ", quantity)
   return (
     <View style={styles.container}>
       <View style={{ ...styles.headerContainer, backgroundColor: color }}>
