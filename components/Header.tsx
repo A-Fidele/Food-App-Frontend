@@ -1,10 +1,14 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function Header() {
+type HeaderProps = {
+  pseudo: string,
+}
+
+export default function Header({ pseudo }: HeaderProps) {
   return (
     <View style={styles.textContainer}>
-      <Text style={styles.title}>What do you want to eat today?</Text>
+      <Text style={styles.title}>{pseudo && `${pseudo}! `}What do you want to eat today?</Text>
       <Text style={styles.subTitle}>Our daily healthy meal plans</Text>
     </View>
   );

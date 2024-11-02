@@ -1,11 +1,16 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Animated, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { StyleSheet, View, Animated, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Picture from "../components/Home/Picture";
 import Footer from "../components/Home/Footer";
 import { HomeScreenNavigationProp } from "../typeScript/constants";
+import { useEffect, useRef, useState } from "react";
+import SigninTitle from "../components/Home/Signin/SigninTitle";
+import Inputs from "../components/Home/Signin/Inputs";
+import ErrorMessage from "../components/Home/Signin/ErrorMessage";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { TouchableHighlight } from "react-native-gesture-handler";
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import SubmitButton from "../components/Home/Signin/SubmitButton";
+import { login } from "../reducers/user";
+import { useDispatch } from "react-redux";
 
 
 export default function HomeScreen() {
@@ -14,22 +19,70 @@ export default function HomeScreen() {
   const slideInAnim = useRef(new Animated.Value(-50)).current;
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [token, setToken] = useState("")
+  const [error, setError] = useState('')
+  const [createAccount, setCreateAccount] = useState(false)
+  const dispatch = useDispatch()
 
   const handleClick = () => {
-    navigation.navigate("Search");
+    if (!token) {
+      setCreateAccount(true)
+    } else {
+      navigation.navigate("Search");
+    }
   };
 
   const handleSubmit = async () => {
-    console.log('email: ', email)
-    console.log('password: ', password)
-    // const response = await fetch('http://localhost:3000/signin', {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ email, password })
-    // }
-    // )
-    // const signinData = await response.json()
-
+    if (!createAccount) {
+      const response = await fetch('http://localhost:3000/users/signin', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      })
+      const user = await response.json()
+      if (user.result === false) {
+        setError(user.error)
+      } else {
+        setError("Connecté ;-)")
+        dispatch(login({
+          value: {
+            pseudo: user.user.pseudo,
+            email: user.user.email,
+            token: user.user.token,
+            favorites: user.user.favorites,
+          }
+        }))
+        setToken(user.user.token)
+      }
+    }
+    if (createAccount) {
+      if (password !== confirmPassword) {
+        setError("Les mots de passe sont différents")
+        return
+      }
+      const response = await fetch('http://localhost:3000/users/signup', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      })
+      const user = await response.json()
+      if (user.result === false) {
+        setError(user.error)
+        return
+      } else {
+        setError("Connecté")
+        dispatch(login({
+          value: {
+            pseudo: user.user.pseudo,
+            email: user.user.email,
+            token: user.user.token,
+            favorites: []
+          }
+        }))
+        setToken(user.user.token)
+      }
+    }
   }
 
   useEffect(() => {
@@ -49,60 +102,44 @@ export default function HomeScreen() {
     Animated.parallel([fadeInAnimation, slideInAnimation]).start();
   }, [fadeInAnim, slideInAnim]);
 
-
   return (
     <View style={styles.container}>
-      {/* <Picture /> */}
+      {token ?
+        <Picture />
+        :
+        <View style={styles.login}>
+          <Animated.View style={{
+            opacity: fadeInAnim,
+            transform: [{ translateY: slideInAnim }],
+            ...styles.titleContainer
+          }}>
+            <SigninTitle />
+          </Animated.View>
 
-      <View style={styles.login}>
-
-        <Animated.View style={{
-          opacity: fadeInAnim,
-          transform: [{ translateY: slideInAnim }],
-          ...styles.titleContainer
-        }}>
-          <Text style={styles.title}>{`Login :-)`}</Text>
-        </Animated.View>
-
-        <Animated.View style={{
-          opacity: fadeInAnim,
-          width: "100%", flexDirection: "row", marginLeft: "50%"
-        }}>
-          <Text style={styles.label}><FontAwesome name="user" size={28} /></Text>
-          <TextInput style={{ ...styles.input, marginLeft: "6%" }}
-            value={email}
-            placeholder="email"
-            placeholderTextColor={"#a7a7a7"}
-            secureTextEntry={false}
-            onChangeText={(text) => setEmail(text)}
-          />
-        </Animated.View>
-        <Animated.View style={{
-          opacity: fadeInAnim,
-          width: "100%", marginLeft: '50%', flexDirection: "row", marginTop: "10%"
-        }}>
-          <Text style={styles.label}><FontAwesome name="key" size={28} /></Text>
-          <TextInput style={styles.input}
-            value={password}
-            placeholder="password"
-            placeholderTextColor={"#a7a7a7"}
-            secureTextEntry={true}
-            onChangeText={(text) => setPassword(text)}
-          />
-        </Animated.View>
-        <View style={styles.submitContainer}>
-          <TouchableOpacity onPress={handleSubmit}>
-            <Text style={styles.submitButton}>Validate</Text>
-          </TouchableOpacity>
+          <Animated.View style={{
+            opacity: fadeInAnim,
+            width: "100%", flexDirection: "row", marginLeft: "50%"
+          }}>
+            <Inputs
+              email={email}
+              password={password}
+              confirmPassword={confirmPassword}
+              setEmail={setEmail}
+              setPassword={setPassword}
+              setConfirmPassword={setConfirmPassword}
+              createAccount={createAccount}
+            />
+          </Animated.View>
+          <ErrorMessage error={error} />
+          <SubmitButton handleSubmit={handleSubmit} />
         </View>
-      </View>
-
+      }
       <Footer
         handleClick={handleClick}
         title="FoodApp"
-        //actionLabel="Let's Go!"
-        actionLabel="Create Account"
-
+        actionLabel={token ? "Let's Go!"
+          : <Text >
+            <FontAwesome name="user" size={28} />{"  "}Create Account</Text>}
       />
     </View >
   );
@@ -116,37 +153,10 @@ const styles = StyleSheet.create({
   titleContainer: {
     marginBottom: "20%",
   },
-  title: {
-    color: "white",
-    fontSize: 48,
-    fontWeight: "semibold",
-  },
   login: {
     flex: 1,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
   },
-  label: {
-    color: "white",
-    fontSize: 20,
-  },
-  input: {
-    width: "30%",
-    borderColor: "#655074",
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 2,
-    borderWidth: 1,
-    color: "white",
-    marginLeft: "4%",
-    fontSize: 18,
-  },
-  submitContainer: {
-    marginTop: "20%",
-  },
-  submitButton: {
-    color: "white",
-    fontSize: 20,
-    marginRight: "10%",
-  }
 });

@@ -11,6 +11,7 @@ import BookmarkButton from "../components/Recipe/BookmarkButton";
 import RecipePicture from "../components/Recipe/RecipePicture";
 import GoBackNavigation from "../components/Recipe/GoBackNavigation";
 import RecipeTitle from "../components/Recipe/RecipeTitle";
+import { UserState } from "../reducers/user";
 
 export type RootStackParamList = {
   Recipe: { id: number; quantity?: number };
@@ -37,6 +38,7 @@ export default function RecipeScreen() {
   const [isBookmark, setIsBookmark] = useState<boolean>(false)
 
   const dispatch = useDispatch();
+  //const user = useSelector((state: { user: UserState }) => state.user.value)
   const favorites = useSelector((state: { favorites: FavoritesState }) => state.favorites.value)
   const recipesData = recipes;
   const myRecipe = recipesData.filter((recipe) => recipe.id === id);
@@ -101,7 +103,7 @@ export default function RecipeScreen() {
   const handleNavigation = () => {
     navigation.goBack();
   };
-
+  // console.log("USERSATE:", user)
   return (
     <View style={styles.container}>
       <View style={{ ...styles.headerContainer, backgroundColor: color }}>

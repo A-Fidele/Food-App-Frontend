@@ -31,7 +31,6 @@ export default function MyRecipesScreen() {
     setIsVisible(false);
     navigation.navigate("Favorites");
   };
-  console.log("favorites", favorites);
 
   return (
     <View style={styles.container}>
