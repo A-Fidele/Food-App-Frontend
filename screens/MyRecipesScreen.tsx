@@ -57,8 +57,6 @@ export default function MyRecipesScreen() {
     fetchFavoriteRecipes()
   }, [])
 
-  //console.log("myrecipescreen id:",id,"quantity", quantity);
-
   return (
     <View style={styles.container}>
       <MenuIcon handleShowModal={handleShowModal} />
