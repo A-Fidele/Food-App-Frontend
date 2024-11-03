@@ -2,7 +2,7 @@ import { ImageRequireSource, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addFavoriteRecipe, FavoriteRecipe, FavoritesState, IngredientType, updateServingNb } from "../reducers/favorites";
+import { FavoriteRecipe, IngredientType } from "../reducers/favorites";
 import RecipeData from "../components/RecipeData";
 import IngredientsHeader from "../components/reusable/IngredientsHeader";
 import Ingredients from "../components/Ingredients";
@@ -47,16 +47,15 @@ export default function RecipeScreen() {
   const handleIncrease = () => {
     const updatedServingNb = servingNb + 1;
     setServingNb(updatedServingNb);
-
     const dataServing = { id, servingNb: updatedServingNb };
-    dispatch(updateServingNb(dataServing));
+    //dispatch(updateServingNb(dataServing));
   };
 
   const handleDecrease = async () => {
     const updatedServingNb = servingNb > 1 && servingNb - 1;
     updatedServingNb && setServingNb(updatedServingNb);
     const dataServing = { id, servingNb: updatedServingNb };
-    dispatch(updateServingNb(dataServing));
+    //dispatch(updateServingNb(dataServing));
   };
 
   useEffect(() => {
@@ -114,7 +113,7 @@ export default function RecipeScreen() {
         )
       })
   };
-  console.log(' id, quantity: ', id, ", ", quantity)
+
   return (
     <View style={styles.container}>
       <View style={{ ...styles.headerContainer, backgroundColor: color }}>

@@ -27,7 +27,7 @@ export default function HomeScreen() {
 
   const handleClick = () => {
     if (!token) {
-      setCreateAccount(true)
+      setCreateAccount(!createAccount)
     } else {
       navigation.navigate("Search");
     }
@@ -113,7 +113,7 @@ export default function HomeScreen() {
             transform: [{ translateY: slideInAnim }],
             ...styles.titleContainer
           }}>
-            <SigninTitle />
+            <SigninTitle createAccount={createAccount} />
           </Animated.View>
 
           <Animated.View style={{
@@ -139,7 +139,9 @@ export default function HomeScreen() {
         title="FoodApp"
         actionLabel={token ? "Let's Go!"
           : <Text >
-            <FontAwesome name="user" size={28} />{"  "}Create Account</Text>}
+            <FontAwesome name="user" size={28} />{"  "}{
+              createAccount ? 'Create Account' : 'Login'
+            }</Text>}
       />
     </View >
   );
