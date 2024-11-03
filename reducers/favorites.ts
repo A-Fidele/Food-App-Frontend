@@ -47,18 +47,18 @@ export const favoritesSlice = createSlice({
       }
       state.value.push(action.payload);
     },
-    updateServingNb: (state, action) => {
-      const existingIndex = state.value.findIndex(
-        (recipe) => recipe.id === action.payload.id
-      );
+    // updateServingNb: (state, action) => {
+    //   const existingIndex = state.value.findIndex(
+    //     (recipe) => recipe.id === action.payload.id
+    //   );
 
-      if (existingIndex !== -1) {
-        state.value[existingIndex].servingNb = action.payload.servingNb;
-        return;
-      }
-    },
+    //   if (existingIndex !== -1) {
+    //     state.value[existingIndex].servingNb = action.payload.servingNb;
+    //     return;
+    //   }
+    // },
   },
 });
 
-export const { addFavoriteRecipe, updateServingNb } = favoritesSlice.actions;
+export const { addFavoriteRecipe } = favoritesSlice.actions;
 export default favoritesSlice.reducer;

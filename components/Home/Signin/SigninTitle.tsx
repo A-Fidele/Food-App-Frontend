@@ -1,12 +1,14 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
-type Props = {}
+type SigninTitleProps = { createAccount: boolean }
 
-export default function SigninTitle({ }: Props) {
+export default function SigninTitle({ createAccount }: SigninTitleProps) {
     return (
         <View>
-            <Text style={styles.title}>{`Login :-)`}</Text>
+            <Text style={styles.title}>{
+                !createAccount ? `Login :-)` : 'SignUp ^o^'
+            }</Text>
         </View>
     )
 }
