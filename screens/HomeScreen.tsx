@@ -140,7 +140,7 @@ export default function HomeScreen() {
         actionLabel={token ? "Let's Go!"
           : <Text >
             <FontAwesome name="user" size={28} />{"  "}{
-              createAccount ? 'Create Account' : 'Login'
+              !createAccount ? 'Create Account' : 'Login'
             }</Text>}
       />
     </View >

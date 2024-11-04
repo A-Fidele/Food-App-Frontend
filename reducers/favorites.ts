@@ -47,16 +47,6 @@ export const favoritesSlice = createSlice({
       }
       state.value.push(action.payload);
     },
-    // updateServingNb: (state, action) => {
-    //   const existingIndex = state.value.findIndex(
-    //     (recipe) => recipe.id === action.payload.id
-    //   );
-
-    //   if (existingIndex !== -1) {
-    //     state.value[existingIndex].servingNb = action.payload.servingNb;
-    //     return;
-    //   }
-    // },
   },
 });
 
