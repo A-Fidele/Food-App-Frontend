@@ -1,7 +1,7 @@
 import { ImageRequireSource, StyleSheet, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { FavoriteRecipe, IngredientType } from "../reducers/favorites";
 import RecipeData from "../components/RecipeData";
 import IngredientsHeader from "../components/reusable/IngredientsHeader";
@@ -37,7 +37,6 @@ export default function RecipeScreen() {
   const [isBookmark, setIsBookmark] = useState<boolean>(false)
   const [recipesData, setRecipesData] = useState<FavoriteRecipe>()
 
-  const dispatch = useDispatch();
   const user = useSelector((state: { user: UserState }) => state.user.value)
 
   const handleNavigation = () => {
@@ -47,15 +46,27 @@ export default function RecipeScreen() {
   const handleIncrease = () => {
     const updatedServingNb = servingNb + 1;
     setServingNb(updatedServingNb);
-    const dataServing = { id, servingNb: updatedServingNb };
-    //dispatch(updateServingNb(dataServing));
   };
 
   const handleDecrease = async () => {
     const updatedServingNb = servingNb > 1 && servingNb - 1;
     updatedServingNb && setServingNb(updatedServingNb);
-    const dataServing = { id, servingNb: updatedServingNb };
-    //dispatch(updateServingNb(dataServing));
+  };
+
+  const handleBookmark = () => {
+    setIsBookmark(!isBookmark)
+    fetch('http://localhost:3000/users/updateFavorites', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: user.email, recipeId: id })
+    }).then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          console.log("BOOKMARK:", data.result);
+        } else (
+          console.log("result:", data.result, "userFavorites:", data.userFavorites)
+        )
+      })
   };
 
   useEffect(() => {
@@ -70,7 +81,7 @@ export default function RecipeScreen() {
       setRating(recipesData.rating);
       setColor(recipesData.color);
       setServing(recipesData.serving);
-      setServingNb(quantity ? quantity : 1);
+      setServingNb(recipesData.servingNb ? recipesData.servingNb : 1);
     }
   }, [recipesData, quantity]);
 
@@ -98,21 +109,30 @@ export default function RecipeScreen() {
     findRecipeById(id)
   }, [id])
 
-  const handleBookmark = () => {
-    setIsBookmark(!isBookmark)
-    fetch('http://localhost:3000/users/updateFavorites', {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: user.email, recipeId: id })
-    }).then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          console.log("BOOKMARK:", data.result);
-        } else (
-          console.log("result:", data.result, "userFavorites:", data.userFavorites)
-        )
+  useEffect(() => {
+    return () => {
+      fetch('http://localhost:3000/users/updateServing', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          servingNb: servingNb,
+          id: id,
+        })
       })
-  };
+        .then((response) => response.json())
+        .then((data) => {
+          if (!data.result) {
+            console.log("Error in updating servingNb", data.error);
+          } else {
+            console.log("ServingNb updated successfully");
+          }
+        })
+        .catch((error) => {
+          console.error("Fetch error:", error);
+        });
+    };
+  }, [servingNb, id]);
+
 
   return (
     <View style={styles.container}>
