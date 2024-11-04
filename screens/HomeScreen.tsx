@@ -9,8 +9,8 @@ import Inputs from "../components/Home/Signin/Inputs";
 import ErrorMessage from "../components/Home/Signin/ErrorMessage";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SubmitButton from "../components/Home/Signin/SubmitButton";
-import { login } from "../reducers/user";
-import { useDispatch } from "react-redux";
+import { login, UserState } from "../reducers/user";
+import { useDispatch, useSelector } from "react-redux";
 
 
 export default function HomeScreen() {
@@ -20,9 +20,10 @@ export default function HomeScreen() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
-  const [token, setToken] = useState("")
+  const [token, setToken] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [createAccount, setCreateAccount] = useState(false)
+  const user = useSelector((state: { user: UserState }) => state.user.value)
   const dispatch = useDispatch()
 
   const handleClick = () => {
@@ -101,6 +102,12 @@ export default function HomeScreen() {
     //both animations in parallel
     Animated.parallel([fadeInAnimation, slideInAnimation]).start();
   }, [fadeInAnim, slideInAnim]);
+
+  useEffect(() => {
+    setToken(user.token ? user.token : null)
+  })
+
+  console.log("token:", user.token);
 
   return (
     <View style={styles.container}>

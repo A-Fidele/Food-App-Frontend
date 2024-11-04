@@ -6,12 +6,13 @@ import MenuIcon from "../components/reusable/MenuIcon";
 import MenuModal from "../components/reusable/MenuModal";
 import RecipesList from "../components/Recipe/RecipesList";
 import { HomeScreenNavigationProp } from "../typeScript/constants";
-import { useSelector } from "react-redux";
-import { UserState } from "../reducers/user";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, UserState } from "../reducers/user";
 import { FavoriteRecipe } from "../reducers/favorites";
 
 export default function SearchScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
+  const dispatch = useDispatch()
   const user = useSelector((state: { user: UserState }) => state.user.value)
   const [isVisible, setIsVisible] = useState(false);
   const [recipesData, setRecipesData] = useState<FavoriteRecipe[]>([])
@@ -33,6 +34,11 @@ export default function SearchScreen() {
     setIsVisible(false);
     navigation.navigate("Favorites");
   };
+
+  const handleLogOut = () => {
+    dispatch(logout())
+    navigation.navigate("Home")
+  }
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -61,6 +67,7 @@ export default function SearchScreen() {
       <MenuIcon handleShowModal={handleShowModal} />
       <MenuModal
         isVisible={isVisible}
+        handleLogOut={handleLogOut}
         handleShowModal={handleShowModal}
         handleNavigateSearch={handleNavigateSearch}
         handleNavigateFavorites={handleNavigateFavorites}
@@ -83,3 +90,5 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 });
+
+

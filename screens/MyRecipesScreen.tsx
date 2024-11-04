@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import MenuIcon from "../components/reusable/MenuIcon";
 import MenuModal from "../components/reusable/MenuModal";
@@ -9,12 +9,13 @@ import FavoritesList from "../components/Recipe/FavoritesList";
 import { HomeScreenNavigationProp } from "../typeScript/constants";
 import { FavoriteRecipe } from "../reducers/favorites";
 import NoRecipesFound from "../components/Recipe/NoRecipesFound";
-import { UserState } from "../reducers/user";
+import { logout, UserState } from "../reducers/user";
 
 export default function MyRecipesScreen() {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [isVisible, setIsVisible] = useState(false);
   const [favorites, setFavorites] = useState<FavoriteRecipe[]>([])
+  const dispatch = useDispatch()
   const user = useSelector((state: { user: UserState }) => state.user.value)
 
   const handlePressRecipe = (id: string, quantity: number) => {
@@ -33,6 +34,11 @@ export default function MyRecipesScreen() {
     setIsVisible(false);
     navigation.navigate("Favorites");
   };
+
+  const handleLogOut = () => {
+    dispatch(logout())
+    navigation.navigate("Home")
+  }
 
   useEffect(() => {
     const fetchFavoriteRecipes = () => {
@@ -65,6 +71,7 @@ export default function MyRecipesScreen() {
         handleShowModal={handleShowModal}
         handleNavigateSearch={handleNavigateSearch}
         handleNavigateFavorites={handleNavigateFavorites}
+        handleLogOut={handleLogOut}
       />
       {favorites.length > 0 ? <Title /> : <NoRecipesFound />}
       <FavoritesList

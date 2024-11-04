@@ -5,7 +5,7 @@ export type UserState = {
     value: {
         pseudo: string;
         email: string;
-        token: string;
+        token: string | null;
         favorites: string[]
     }
 }
@@ -26,9 +26,17 @@ export const userSlice = createSlice({
         login: (state, action: PayloadAction<UserState>) => {
             state.value = action.payload.value;
         },
+        logout: (state) => {
+            state.value = {
+                pseudo: "",
+                email: "",
+                token: null,
+                favorites: []
+            }
+        },
     }
 
 })
 
-export const { login } = userSlice.actions;
+export const { login, logout } = userSlice.actions;
 export default userSlice.reducer

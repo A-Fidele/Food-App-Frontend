@@ -5,12 +5,14 @@ type MenuModalProps = {
   handleShowModal: () => void,
   handleNavigateSearch: () => void,
   handleNavigateFavorites: () => void,
+  handleLogOut: () => void;
   isVisible: boolean,
 }
 export default function MenuModal({
   handleShowModal,
   handleNavigateSearch,
   handleNavigateFavorites,
+  handleLogOut,
   isVisible,
 }: MenuModalProps) {
   return (
@@ -30,6 +32,11 @@ export default function MenuModal({
         <View style={styles.menuButton}>
           <TouchableOpacity onPress={handleNavigateFavorites}>
             <Text style={styles.textButton}>My recipes</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.menuButton}>
+          <TouchableOpacity onPress={handleLogOut}>
+            <Text style={styles.textButton}>LogOut</Text>
           </TouchableOpacity>
         </View>
       </View>
